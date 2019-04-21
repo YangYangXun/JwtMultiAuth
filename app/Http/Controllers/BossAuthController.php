@@ -17,6 +17,15 @@ use Illuminate\Support\Facades\Auth;
 class BossAuthController extends Controller
 {
     //
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('boss', ['except' => ['loginBoss']]);
+    }
 
     /**
      * Get a JWT via given credentials.
