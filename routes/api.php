@@ -22,3 +22,16 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
+
+Route::group([
+
+    'prefix' => 'auth/boss',
+
+], function () {
+
+    Route::post('login', 'BossAuthController@loginBoss');
+    Route::post('logout', 'BossAuthController@logoutBoss');
+    Route::post('refresh', 'BossAuthController@refresh');
+    Route::post('me', 'BossAuthController@boss');
+
+});

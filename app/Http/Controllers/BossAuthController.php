@@ -5,38 +5,29 @@
 | AuthController
 |--------------------------------------------------------------------------
 |
-| Jwt Auth for Staff
+| Jwt Auth for Boss
 |
  */
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class BossAuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
+    //
 
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function loginBoss()
     {
         $credentials = request(['email', 'password']);
 
-        if (!$token = Auth::guard('staff')->attempt($credentials)) {
-            // if (!$token = auth()->attempt($credentials)) {
+        if (!$token = Auth::guard('boss')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -48,9 +39,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function boss()
     {
-        return response()->json(auth()->user());
+        return response()->json(Auth::guard('boss')->user());
     }
 
     /**
@@ -58,9 +49,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logoutBoss()
     {
-        auth()->logout();
+        Auth::guard('boss')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -72,7 +63,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(Auth::guard('boss')->refresh());
     }
 
     /**
@@ -87,7 +78,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => Auth::guard('boss')->factory()->getTTL() * 60,
         ]);
     }
 }
